@@ -1,0 +1,27 @@
+import express, { Request, Response, Application } from 'express';
+import logger from './middlewares/logger';
+import todosHandlers from './handlers/todos';
+import userRoutes from './handlers/users';
+
+const app: Application = express();
+const port = 3000;
+
+//app.use a list of your custom middlewares
+app.use([logger]);
+
+//app.use routes takes url and routes object. now to access routes root url you need to access /api
+app.use('/users', userRoutes);
+
+//app.Method takes two parameters, URI and callback function
+//callback function takes request and response objects as parameters
+app.get('/', async (req: Request, res: Response): Promise<void> => {
+  res.sendFile(__dirname + '/views/index.html');
+});
+
+//use this function to map your app to a port
+app.listen(port, () => {
+  console.log('server started on port: ' + port);
+});
+
+todosHandlers(app);
+export default app;
