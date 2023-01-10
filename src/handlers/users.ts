@@ -2,21 +2,28 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express, { Request, Response } from 'express';
 import JWT from 'jsonwebtoken';
+import requireAdmin from '../middlewares/requireAdmin';
+import requireAuth from '../middlewares/requireAuth';
 import { User, UserStore } from '../models/user';
 
 const userRoutes = express.Router();
 const userStore = new UserStore();
 const { JWT_PRIVATE_KEY } = process.env;
 //we will discard corrupted limit/completed but we will validate sort
-userRoutes.get('/', async (req: Request, res: Response): Promise<void> => {
-  try {
-    const newUsers = await userStore.index();
-    res.json(newUsers);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
+userRoutes.get(
+  '/',
+  requireAuth,
+  requireAdmin,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const newUsers = await userStore.index();
+      res.json(newUsers);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
   }
-});
+);
 
 //get user by id, we pass variable url by this syntax :varName
 userRoutes.get('/:id', async (req: Request, res: Response): Promise<void> => {
