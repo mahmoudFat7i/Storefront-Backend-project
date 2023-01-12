@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
 import { Pool } from 'pg';
-
-dotenv.config();
+import config from './lib/config';
 
 const {
   POSTGRES_HOST,
@@ -10,11 +8,11 @@ const {
   POSTGRES_PASSWORD,
   POSTGRES_TEST_DB,
   NODE_ENV
-} = process.env;
+} = config;
 
 let client: Pool = new Pool();
 
-if (NODE_ENV == 'test') {
+if (NODE_ENV.trim() == 'test') {
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_TEST_DB,
@@ -23,7 +21,7 @@ if (NODE_ENV == 'test') {
   });
 }
 
-if (NODE_ENV == 'dev') {
+if (NODE_ENV.trim() == 'dev') {
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_DB,

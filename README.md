@@ -5,23 +5,17 @@ Udacity Storefront Backend project
 
 - To get started, clone this repo and run `yarn or npm i` in your terminal at the project root.
 
-- you have to have a .env file in the repo, it has to contain the following variables
-POSTGRES_HOST=127.0.0.1
-POSTGRES_DB=todos_dev
-POSTGRES_TEST_DB=todos_test
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-NODE_ENV=dev
+- please check out config file at src\lib\config.ts .
 
 - you have to create two databases with the value you set in POSTGRES_DB, POSTGRES_TEST_DB, this is an example for the SQL needed when connected to psql
 `
-CREATE USER username123 WITH PASSWORD 'password123';    
-CREATE DATABASE todos_dev;  
-\c todos_dev
-GRANT ALL PRIVILEGES ON DATABASE todos_dev TO username123;
-CREATE DATABASE todos_test;
-\c todos_test
-GRANT ALL PRIVILEGES ON DATABASE todos_test TO username123;
+CREATE USER shopping_user WITH PASSWORD 'password123';    
+CREATE DATABASE shopping;  
+\c shopping
+GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user;
+CREATE DATABASE shopping_test;
+\c shopping_test
+GRANT ALL PRIVILEGES ON DATABASE shopping_test TO shopping_user;
 `
 
 ## Overview
@@ -33,11 +27,17 @@ GRANT ALL PRIVILEGES ON DATABASE todos_test TO username123;
 - to run migrations up on test environment run `npm run testdb-up`, to run migrations down it run `npm run testdb-reset`
 - to create a new migration run :db-migrate create todos --sql-file
 
-### 2. database.json
-this is given to the db-migrate to setup different databases (test/dev), for more info check :
-https://db-migrate.readthedocs.io/en/latest/Getting%20Started/configuration/
+### 2. API endpoints 
+- check requirments.md
 
+### 3. Authentication
+- on user creation or succesful authentication, user is provided a token, make sure to add this as a bearer token in authorization for routes that require authentication to work correctly 
 
-### 3. Local host ports
+### 4. QA and `README.md`
+- to run tests for database run `npm run test-db`
+- to run tests for routes run `npm run test-routes`
+
+### 5. local host ports
+
 -for the database, port is not specified so it will run on the selected port for postgres installation (default is 5432)
 -server is running on port 3000
