@@ -7,10 +7,10 @@
 
 <body>
   <h1 id="api-endpoints">API Endpoints</h1>
-  <h2 id="products">products</h2>
+  <h2 id="orders">orders</h2>
   <ul>
     <li>
-      <h3>Create (/products) POST</h3>
+      <h3>Create (/orders) POST</h3>
       body:
       <ul>
         <li> title
@@ -18,7 +18,7 @@
       </ul>
     </li>
     <li>
-      <h3>index(/products) GET</h3>
+      <h3>index(/orders) GET</h3>
       queries:
       <ul>
         <li> sort=asc/dec
@@ -30,10 +30,10 @@
       </ul>
     </li>
     <li>
-      <h3>Show(/products/:id) GET</h3>
+      <h3>Show(/orders/:id) GET</h3>
     </li>
     <li>
-      <h3>Create (/products/:id) PATCH</h3>
+      <h3>Create (/orders/:id) PATCH</h3>
       body(must contain at least one of):
       <ul>
         <li> title
@@ -43,7 +43,7 @@
       </ul>
     </li>
     <li>
-      <h3>Delete(/products/:id) DELETE</h3>
+      <h3>Delete(/orders/:id) DELETE</h3>
     </li>
   </ul>
 </body>
