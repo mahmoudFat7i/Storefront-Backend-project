@@ -15,8 +15,8 @@ Udacity Storefront Backend project
 
 ### 1. DB Creation and Migrations
 
-- to run migrations up on dev environment run `npm run devdb-up`, to run migrations down it run `npm run devdb-reset`
-- to run migrations up on test environment run `npm run testdb-up`, to run migrations down it run `npm run testdb-reset`
+- to run migrations up on dev environment run `npm run test-up`, to run migrations down it run `npm run resetdb`
+- to run migrations up on test environment run `npm run test-up`, to run migrations down it run `npm run resetdb`
 - to create a new migration run :db-migrate create store --sql-file
 
 ### 2. API endpoints
