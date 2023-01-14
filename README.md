@@ -1,48 +1,116 @@
-# Storefront-Backend-project
+# udacity-build-a-storefront-backend
+Build a JavaScript API based on a requirements given by the stakeholders. You will architect the database, tables, and columns to fulfill the requirements.
 
-Udacity Storefront Backend project
+The database schema and and API route information can be found in the (REQUIREMENT.md)
 
-## Getting Started
+## Installation Instructions:
+This section contains all the packages used in this project and how to install them. However, you can fork this repo and run the following command at the root directory to install all packages.
 
-- To get started, clone this repo and run `yarn or npm i` in your terminal at the project root.
+`yarn` or `npm install`
 
-- you have to have a .env file in the repo, it has to contain the following variables
-  POSTGRES_HOST=127.0.0.1
-  POSTGRES_DB=store_dev
-  POSTGRES_TEST_DB=store_test
-  POSTGRES_USER=postgres
-  POSTGRES_PASSWORD=postgres
-  NODE_ENV=dev
-  BCRYPT_PASSWORD=your hash password
-  SALT_ROUNDS=number of rounds
-  TOKEN_SECRET=YourSecret
-  ALL PRIVILEGES ON DATABASE shopping test TO shopping_user;
+### Packages
 
-- you have to create two databases with the value you set in POSTGRES_DB, POSTGRES_TEST_DB, this is an example for the SQL needed when connected to psql
-  `CREATE USER shopping_user WITH PASSWORD 'password123'; CREATE DATABASE shopping; \c shopping GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user; CREATE DATABASE shopping_test; \c shopping_test GRANT ALL PRIVILEGES ON DATABASE shopping_test TO shopping_user;`
+#### express
+`npm i -S express`
+`npm i -D @types/express`
 
-## Overview
+#### typescript
+`npm i -D typescript`
 
-### 1. DB Creation and Migrations
+#### db-migrate
+`npm install -g db-migrate`
 
-- to run migrations up on dev environment run `npm run test-up`, to run migrations down it run `npm run resetdb`
-- to run migrations up on test environment run `npm run test-up`, to run migrations down it run `npm run resetdb`
-- to create a new migration run :db-migrate create store --sql-file
+#### g
+`npm install -g n`
 
-### 2. API endpoints
+#### rimraf 
+`npm install --save rimraf`
 
-- check requirments.md
+#### cors
+`npm install --save cors`
 
-### 3. Authentication
+#### bcrypt
+`npm -i bcrypt`
+`npm -i -D @types/bcrypt`
 
-- on user creation or succesful authentication, user is provided a token, make sure to add this as a bearer token in authorization for routes that require authentication to work correctly
+#### morgan 
+`npm install --save morgan`
+`npm -i -D @types/morgan`
 
-### 4. QA and `README.md`
+### nodemon 
+`npm i nodemon`
 
-- to run tests for database run `npm run test-db`
-- to run tests for routes run `npm run test-routes`
+#### jsonwebtoken
+`npm install jsonwebtoken --sav`
+`npm -i -D @types/jsonwebtoken`
 
-### 5. local host ports
+#### jasmine
+`npm install jasmine @types/jasmine @ert78gb/jasmine-ts ts-node --save-dev`
 
--for the database, port is not specified so it will run on the selected port for postgres installation (default is 5432)
--server is running on port 3000
+#### supertest
+`npm i supertest`
+`npm i --save-dev @types/supertest`
+
+
+## Set up Database
+
+`docker-compose up`  to start the docker container
+`npm install` to install all dependencies
+`db-migrate up` to set up the database and get access via http://127.0.0.1:5432
+`npm run build` to build the app
+
+
+### Start 
+`npm run start` to start the app and get access via http://127.0.0.1:
+### Create Databases
+We shall create the dev and test database.
+
+- connect to the default postgres database as the server's root user `psql -U postgres`
+
+### Migrate Database
+Navigate to the root directory and run the command below to migrate the database 
+
+`yarn dev-up`
+
+## Environmental Variables Set up
+Bellow are the environmental variables that needs to be set in a `.env` file. This is the default setting that I used for development, but you can change it to what works for you. 
+
+**NB:** The given values are used in development and testing but not in production. 
+```
+PORT=127.0.0.1
+POSTGRES_HOST="localhost"
+POSTGRES_USER="###"
+POSTGRES_PASSWORD="###"
+POSTGRES_DB="storefront"
+POSTGRES_TEST_DB="storefront"
+TOKEN_KEY=###
+ENV=test
+BCRYPT_PASSWORD=###
+SALT_ROUNDS="10"
+
+```
+
+## Start App
+`yarn watch` or `npm run start`
+
+### Running Ports 
+After start up, the server will start on port `3000` and the database on port `5432`
+
+## Endpoint Access
+All endpoints are described in the [REQUIREMENT.md](REQUIREMENTS.md) file. 
+
+## Token and Authentication
+Tokens are passed along with the http header as 
+```
+Authorization   Bearer <token>
+```
+
+## Testing
+Run test with 
+
+`npm run test`
+
+It sets the environment to `test`, migrates up tables for the test database, run the test then migrate down all the tables for the test database. 
+
+
+

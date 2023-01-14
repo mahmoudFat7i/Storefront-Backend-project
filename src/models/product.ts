@@ -1,64 +1,77 @@
 import Client from '../database';
 
-export type Product = {
-  id?: number;
+export interface BaseProduct {
   name: string;
   price: number;
-};
+}
+
+export interface Product extends BaseProduct {
+  id: number;
+}
 
 export class ProductStore {
   async index(): Promise<Product[]> {
     try {
-      const conn = await Client.connect();
+      const connection = await Client.connect();
       const sql = 'SELECT * FROM products';
-
-      const result = await conn.query(sql);
-
-      conn.release();
-
-      return result.rows;
+      const { rows } = await connection.query(sql);
+      connection.release();
+      return rows;
     } catch (err) {
-      throw new Error(
-        `Could not get products. Error: ${(err as Error).message}`
-      );
+      throw new Error(`Could not get products. ${err}`);
     }
   }
 
-  async show(id: string): Promise<Product> {
-    try {
-      const sql = 'SELECT * FROM products WHERE id=($1)';
-      const conn = await Client.connect();
-
-      const result = await conn.query(sql, [id]);
-
-      conn.release();
-      return result.rows[0];
-    } catch (err) {
-      throw new Error(
-        `Could not find product ${id}. Error: ${(err as Error).message}`
-      );
-    }
-  }
-
-  async create(p: Product): Promise<Product> {
+  async create(product: BaseProduct): Promise<Product> {
+    const { name, price } = product;
     try {
       const sql =
-        'INSERT INTO products (name,price) VALUES($1, $2) RETURNING *';
+        'INSERT INTO products (name, price) VALUES($1, $2) RETURNING *';
       const conn = await Client.connect();
-
-      const result = await conn.query(sql, [p.name, p.price]);
-
-      const product = result.rows[0];
-
+      const { rows } = await conn.query(sql, [name, price]);
       conn.release();
-
-      return product;
+      return rows[0];
     } catch (err) {
-      throw new Error(
-        `Could not create new product : ${p.name} . Error: ${
-          (err as Error).message
-        }`
-      );
+      throw new Error(`Could not add new product ${name}. ${err}`);
+    }
+  }
+
+  async read(id: number): Promise<Product> {
+    try {
+      const sql = 'SELECT * FROM products WHERE id=($1)';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql, [id]);
+      connection.release();
+      return rows[0];
+    } catch (err) {
+      throw new Error(`Could not find product ${id}. ${err}`);
+    }
+  }
+
+  async update(id: number, productData: BaseProduct): Promise<Product> {
+    const { name: newName, price } = productData;
+
+    try {
+      const sql =
+        'UPDATE products SET name = $1, price = $2 WHERE id = $3 RETURNING *';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql, [newName, price, id]);
+      connection.release();
+      return rows[0];
+    } catch (err) {
+      throw new Error(`Could not update product ${name}. ${err}`);
+    }
+  }
+
+  async deleteProduct(id: number): Promise<Product> {
+    try {
+      const sql = 'DELETE FROM products WHERE id=($1)';
+      const connection = await Client.connect();
+      const { rows } = await connection.query(sql, [id]);
+      connection.release();
+      return rows[0];
+    } catch (err) {
+      throw new Error(`Could not delete product ${id}. ${err}`);
     }
   }
 }

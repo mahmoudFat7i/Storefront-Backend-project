@@ -1,103 +1,70 @@
+# API Requirements
+The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
+
+These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
+
 ## API Endpoints
-
-#### Authentication
-
-- Authenticate (/Authenticate) [post]
-  body: {user_name, password}
-
 #### Products
-
-- Index : /products [get]
-- Show : /products/:id [get]
-- Create [token required] : /products [post]
-  body: {name,price}
+- Index: `'products/' [GET]`
+- Show: `'products/:id' [GET]`
+- Create (args: Product)[token required]: `'products/' [POST] (token)`
+- [OPTIONAL] Top 5 most popular products
+- [OPTIONAL] Products by category: `'products/cat/:category' [GET]`
+- [ADDED] Delete: `'products/:id  [DELETE]`
 
 #### Users
-
-- Create [token required : /users[post]
-  body: {user_name,,first_name,last_name, password}
-- current order by user [token required]: /users/:id/orders [get]
+- Index [token required]: `'users/' [GET] (token)`
+- Show [token required]: `'users/:id' [GET] (token)`
+- Create (args: User)[token required]: `'users/' [POST] (token)`
+- [ADDED] Delete [token required]: `'users/:id' [DELETE] (token)`
 
 #### Orders
-
-- Create [token required] : /orders [post]
-  body: {user_id}
-- set status [token required] : /orders/:id [patch]
-  body: {status}
-- add product [token required] : /users/:id [post]
-  body: {product_id, quantity}
+- Index [token required]: `'orders/:user_id' [GET] (token)`
+- Current Order by user [token required]: `'orders/current/:user_id' [GET] (token)`
+- [OPTIONAL] Completed Orders by user [token required]: `'orders/completed/:user_id' [GET] (token)`
+- [ADDED] Active Orders by user [token required]: `'orders/active/:user_id' [GET] (token)`
+- [ADDED] Update order's status [token required]: `'orders?status=<status>&orderId=<order id> [PUT] (token)`
+- [ADDED] Delete [token required]: `'orders/:id [DELETE] (token)`
 
 ## Data Shapes
-
 #### Product
-
-- id
+-  id
 - name
 - price
+- [OPTIONAL] category
 
+```
+Table: Product (id:serial[primary key], name:varchar(50)[not null], price:numeric[not null], category:varchar(50))
+```
 #### User
-
 - id
-- firstName
-- lastName
-- username
+- firstname
+- lastname
 - password
 
+```
+Table: User (id:serial[primary key], firstname: varchar (50)[not null], lastname:varchar(50)[not null], password:varchar(60)[not null])
+```
 #### Orders
-
-- id
+- id of each product in the order
+- quantity of each product in the order
 - user_id
 - status of order (active or complete)
 
-#### order products
+```
+Table: Orders (id:serial[primary key], product_id:integer(foreign key to products table), quantity:integer[default 1], user_id:integer(foreign key to users table), status:enum(active, complete)[not null])
+```
 
-- id
-- product id
-- order id
-- quantity of product
+#### Table: order_products
 
-## database Schema
+- order_id INTEGER REFERENCES orders(id)
+- product_id INTEGER REFERENCES products(id)
+- quantity INTEGER
 
-#### database tables
-
-storefront_dev=# \dt
-List of relations
-Schema | Name | Type | Owner
---------+------------------+-------+----------
-public | migrations | table | postgres
-public | migrations_state | table | postgres
-public | order_products | table | postgres
-public | orders | table | postgres
-public | products | table | postgres
-public | users | table | postgres
-
-#### user
-
-storefront_dev=# \d users
-id | integer | | not null | nextval('users_id_seq'::regclass)
-user_name | character varying(255) | | not null |
-first_name | character varying(255) | | not null |
-last_name | character varying(255) | | not null |
-password | character varying(255) | | not null |
-
-#### products
-
-storefront_dev=# \d products  
- id | integer | | not null | nextval('products_id_seq'::regclass)
-name | character varying(255) | | not null |
-price | integer | | not null |
-
-#### orders
-
-storefront_dev=# \d orders
-id | integer | | not null | nextval('orders_id_seq'::regclass)
-status | order_status | | not null |
-user_id | integer | | not null |
-
-#### order products
-
-storefront_dev-# \d order_products
-id | integer | | not null | nextval('order_products_id_seq'::regclass)
-quantity | integer | | not null |
-order_id | integer | | not null |
-product_id | integer | | not null |
+```
+Table: Order Product (
+  order_id: integer(not null) REFERENCES orders (id),
+  product_id: integer(not null) REFERENCES products (id),
+  quantity: integer(not null)
+)
+```
