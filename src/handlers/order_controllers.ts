@@ -1,6 +1,6 @@
-import { Application, Request, Response } from 'express';
-import { verifyToken } from './helpers';
-import { Order, OrderProduct, OrderStore } from '../models/order';
+import { Application, Request, Response } from "express";
+import { verifyToken } from "./helpers";
+import { Order, OrderProduct, OrderStore } from "../models/order";
 
 const OrderStoreInstance = new OrderStore();
 
@@ -23,7 +23,7 @@ const create = async (req: Request, res: Response) => {
     if (!products || !status || !user_id) {
       res.status(400);
       res.send(
-        'Some required parameters are missing! eg. :products, :status, :user_id'
+        "Some required parameters are missing! eg. :products, :status, :user_id"
       );
       return false;
     }
@@ -47,7 +47,7 @@ const read = async (req: Request, res: Response) => {
 
     if (!id) {
       res.status(400);
-      res.send('Missing required parameter :id.');
+      res.send("Missing required parameter :id.");
       return false;
     }
 
@@ -69,7 +69,7 @@ const update = async (req: Request, res: Response) => {
     if (!products || !status || !user_id || !id) {
       res.status(400);
       res.send(
-        'Some required parameters are missing! eg. :products, :status, :user_id, :id'
+        "Some required parameters are missing! eg. :products, :status, :user_id, :id"
       );
       return false;
     }
@@ -93,7 +93,7 @@ const deleteOrder = async (req: Request, res: Response) => {
 
     if (!id) {
       res.status(400);
-      res.send('Missing required parameter :id.');
+      res.send("Missing required parameter :id.");
       return false;
     }
 
@@ -107,9 +107,9 @@ const deleteOrder = async (req: Request, res: Response) => {
 };
 
 export default function orderRoutes(app: Application) {
-  app.get('/orders', index);
-  app.post('/orders/create', verifyToken, create);
-  app.get('/orders/:id', verifyToken, read);
-  app.put('/orders/:id', verifyToken, update);
-  app.delete('/orders/:id', verifyToken, deleteOrder);
+  app.get("/orders", verifyToken, index);
+  app.post("/orders/create", verifyToken, create);
+  app.get("/orders/:id", verifyToken, read);
+  app.put("/orders/:id", verifyToken, update);
+  app.delete("/orders/:id", verifyToken, deleteOrder);
 }
