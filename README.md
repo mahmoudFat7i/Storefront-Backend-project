@@ -6,7 +6,17 @@ Udacity Storefront Backend project
 
 - To get started, clone this repo and run `yarn or npm i` in your terminal at the project root.
 
-- please check out config file at src\lib\config.ts .
+- you have to have a .env file in the repo, it has to contain the following variables
+  POSTGRES_HOST=127.0.0.1
+  POSTGRES_DB=store_dev
+  POSTGRES_TEST_DB=store_test
+  POSTGRES_USER=postgres
+  POSTGRES_PASSWORD=postgres
+  NODE_ENV=dev
+  BCRYPT_PASSWORD=your hash password
+  SALT_ROUNDS=number of rounds
+  TOKEN_SECRET=YourSecret
+  ALL PRIVILEGES ON DATABASE shopping test TO shopping_user;
 
 - you have to create two databases with the value you set in POSTGRES_DB, POSTGRES_TEST_DB, this is an example for the SQL needed when connected to psql
   `CREATE USER shopping_user WITH PASSWORD 'password123'; CREATE DATABASE shopping; \c shopping GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user; CREATE DATABASE shopping_test; \c shopping_test GRANT ALL PRIVILEGES ON DATABASE shopping_test TO shopping_user;`
